@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Check Instagram Followers</title>
+<link rel="icon" href="https://i.ibb.co.com/r2Zv8hgw/Logo-3606-BBD.png">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+    -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+}
+
+.container{width:95%;max-width:900px;margin:auto}
+h1{text-align:center;margin-bottom:10px;font-size:2rem}
+
+/* CARD */
+.card{
+  background:#1e293b;
+  padding:25px;
+  border-radius:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+label{display:block;margin-top:10px;margin-bottom:5px}
+
+input[type=file]{
+  width:100%;
+  padding:8px;
+  border-radius:10px;
+  border:none;
+  background:#0f172a;
+  color:#fff;
+}
+
+/* BUTTON */
+button.main{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(90deg,#38bdf8,#22d3ee);
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:1rem;
+}
+
+/* MODE SWITCH */
+.mode-switch{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:15px;
+}
+
+.mode-switch button{
+  border:none;
+  padding:10px 22px;
+  border-radius:999px;
+  background:#0f172a;
+  color:#94a3b8;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.mode-switch button.active{
+  background:linear-gradient(90deg,#38bdf8,#22d3ee);
+  color:#000;
+}
+
+/* DROP ZONE */
+.drop-zone{
+  display:none;
+  border:2px dashed #38bdf8;
+  padding:35px;
+  text-align:center;
+  border-radius:16px;
+  background:#0f172a;
+  cursor:pointer;
+}
+
+.drop-zone.dragover{background:#1e293b}
+
+/* HELP BUTTON */
+.help-btn{
+  position:fixed;
+  bottom:80px;
+  right:20px;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  background:#38bdf8;
+  color:#000;
+  font-size:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 18px rgba(0,0,0,.4);
+  z-index:999;
+}
+
+/* MODAL GUIDE */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  background:#1e293b;
+  padding:25px;
+  border-radius:18px;
+  max-width:400px;
+  width:90%;
+}
+
+.close{
+  margin-top:15px;
+  width:100%;
+  padding:8px;
+  border:none;
+  border-radius:10px;
+  background:#38bdf8;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* NOTIF TOP */
+.notif{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%) translateY(-20px);
+  background:#ff4d4f;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:8px;
+  opacity:0;
+  transition:.3s;
+}
+
+.notif.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.notif.success{
+  background:#22c55e; /* hijau */
+}
+
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:15px;
+  margin-top:auto;
+  background:#0f172a;
+  border-top:1px solid #334155;
+  font-size:14px;
+  color:#94a3b8;
+  text-decoration: none;
+}
+
+/* DESKTOP DRAG LINK */
+.drag-link{display:none}
+@media (hover:hover) and (pointer:fine){
+  .no-href-link{display:none}
+  .drag-link{
+    display:inline;
+    cursor:grab;
+    color:#38bdf8;
+    font-weight:600;
+    text-decoration: none;
+  }
+}
+.drag-link:active{cursor:grabbing}
+</style>
+</head>
+
+<body>
+
+<div id="notif" class="notif">Upload both files first</div>
+
+<div class="container">
+
+<h1>Check Instagram Followers</h1>
+
+<button class="help-btn" onclick="showGuide()">
+<i class="fas fa-question-circle"></i>
+</button>
+
+<div class="mode-switch">
+<button id="btnPhone" class="active">📱 Smartphone</button>
+<button id="btnDesktop">🖥 Desktop</button>
+</div>
+
+<div class="card">
+
+<div id="phoneInputs">
+<p>Upload JSON Instagram:</p>
+
+<label>Followers:</label>
+<input type="file" id="followers" accept=".json">
+
+<label>Following:</label>
+<input type="file" id="following" accept=".json">
+</div>
+
+<div class="drop-zone" id="desktopDrop">
+Drag & Drop File<br>
+followers_1.json + following.json
+</div>
+
+<button class="main" onclick="cek()">🔍 Check Now</button>
+
+</div>
+
+<div class="card" id="resultCard" style="display:none;">
+<h3>List of those who don't follow back</h3>
+<ul id="result"></ul>
+</div>
+
+</div>
+
+<!-- GUIDE MODAL -->
+<div class="modal" id="guideModal">
+<div class="modal-content">
+<h3>How to use it</h3>
+<p>
+1. Download Instagram data.<br>
+2. Extract ZIP.<br>
+3. Search for followers_1.json & following.json.<br>
+4. Upload both.<br>
+5. Click Check Now.
+</p>
+<button class="close" onclick="hideGuide()">Close</button>
+</div>
+</div>
+
+<footer>
+Created by
+<a data-href="https://www.instagram.com/qinzenu"
+class="no-href-link">@qinzenu</a>
+
+<a href="https://www.instagram.com/qinzenu"
+class="drag-link" draggable="true">
+@qinzenu
+</a>
+</footer>
+
+<script>
+let followersFile=null;
+let followingFile=null;
+
+const btnPhone=document.getElementById('btnPhone');
+const btnDesktop=document.getElementById('btnDesktop');
+const phone=document.getElementById('phoneInputs');
+const drop=document.getElementById('desktopDrop');
+
+btnPhone.onclick=()=>setMode('phone');
+btnDesktop.onclick=()=>setMode('desktop');
+
+function setMode(mode){
+
+ // HAPUS HASIL CEK
+ document.getElementById('resultCard').style.display='none';
+ document.getElementById('result').innerHTML='';
+ followersFile=null;
+ followingFile=null;
+
+ if(mode==='desktop'){
+  phone.style.display='none';
+  drop.style.display='block';
+  btnDesktop.classList.add('active');
+  btnPhone.classList.remove('active');
+ }else{
+  phone.style.display='block';
+  drop.style.display='none';
+  btnPhone.classList.add('active');
+  btnDesktop.classList.remove('active');
+ }
+}
+
+
+/* AUTO DETECT DESKTOP */
+if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+ setMode('desktop');
+}
+
+/* DRAG DROP */
+drop.addEventListener('dragover',e=>{
+ e.preventDefault();
+ drop.classList.add('dragover');
+});
+
+drop.addEventListener('dragleave',()=>drop.classList.remove('dragover'));
+
+drop.addEventListener('drop',e=>{
+ e.preventDefault();
+ drop.classList.remove('dragover');
+ const files=[...e.dataTransfer.files];
+
+ files.forEach(f=>{
+  if(f.name.includes('followers')) followersFile=f;
+  if(f.name.includes('following')) followingFile=f;
+ });
+
+ showNotif('Files loaded ✔','success');
+});
+
+/* GUIDE */
+function showGuide(){
+ document.getElementById('guideModal').style.display='flex';
+}
+function hideGuide(){
+ document.getElementById('guideModal').style.display='none';
+}
+
+/* READ JSON */
+async function readJSON(file){
+ return new Promise(resolve=>{
+  const reader=new FileReader();
+  reader.onload=e=>resolve(JSON.parse(e.target.result));
+  reader.readAsText(file);
+ });
+}
+
+/* CHECK FOLLOWERS */
+async function cek(){
+
+if(phone.style.display!=='none'){
+ followersFile=document.getElementById('followers').files[0];
+ followingFile=document.getElementById('following').files[0];
+}
+
+if(!followersFile || !followingFile){
+ const notif=document.getElementById('notif');
+ notif.classList.add('show');
+ setTimeout(()=>notif.classList.remove('show'),3000);
+ return;
+}
+
+const followers=await readJSON(followersFile);
+const following=await readJSON(followingFile);
+
+const followerList=followers.map(f=>f.string_list_data?.[0]?.value).filter(Boolean);
+const followingList=following.relationships_following.map(f=>f.title);
+
+const notFollowBack=followingList.filter(u=>!followerList.includes(u));
+
+document.getElementById('resultCard').style.display='block';
+const ul=document.getElementById('result');
+ul.innerHTML='';
+
+notFollowBack.forEach(u=>{
+ const li=document.createElement('li');
+ li.textContent=u;
+ ul.appendChild(li);
+});
+}
+
+/* DATA-HREF LINK HANDLER */
+document.querySelectorAll('a[data-href]').forEach(a=>{
+ const url=a.dataset.href;
+ a.addEventListener('click',e=>{
+  e.preventDefault();
+  window.open(url,'_blank');
+ });
+ a.addEventListener('contextmenu',e=>e.preventDefault());
+});
+
+/* DRAG LINK */
+document.querySelectorAll('.drag-link').forEach(a=>{
+ a.addEventListener('dragstart',e=>{
+  e.dataTransfer.setData('text/plain',a.href);
+ });
+});
+
+function showNotif(text,type='error'){
+ const notif=document.getElementById('notif');
+ notif.textContent=text;
+
+ notif.classList.remove('success');
+ if(type==='success') notif.classList.add('success');
+
+ notif.classList.add('show');
+
+ setTimeout(()=>{
+  notif.classList.remove('show');
+ },3000);
+}
+
+
+</script>
+
+
+</body>
+</html>
