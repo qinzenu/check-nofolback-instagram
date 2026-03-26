@@ -214,8 +214,8 @@ footer{
 </button>
 
 <div class="mode-switch">
-<button id="btnPhone" class="active">📱 Smartphone</button>
-<button id="btnDesktop">🖥 Desktop</button>
+<button id="btnPhone" class="active">Smartphone</button>
+<button id="btnDesktop">Desktop</button>
 </div>
 
 <div class="card">
@@ -246,19 +246,40 @@ followers_1.json + following.json
 
 </div>
 
-<!-- GUIDE MODAL -->
 <div class="modal" id="guideModal">
-<div class="modal-content">
-<h3>How to use it</h3>
-<p>
-1. Download Instagram data.<br>
-2. Extract ZIP.<br>
-3. Search for followers_1.json & following.json.<br>
-4. Upload both.<br>
-5. Click Check Now.
-</p>
-<button class="close" onclick="hideGuide()">Close</button>
-</div>
+  <div class="modal-content" id="modalContent">
+    
+    <div id="mainGuide">
+      <h3>How to use it</h3>
+      <p style="text-align: left; line-height: 1.6;">
+        1. Download your Instagram data.<br>
+        2. Extract the ZIP file.<br>
+        3. Find <b>followers_1.json</b> & <b>following.json</b>.<br>
+        4. Upload both files below.<br>
+        5. Click "Check Now".<br>
+        <span id="howToGetFile" style="color:white; cursor:pointer; text-decoration:underline; display:block; margin-top:12px; font-weight: 600;">
+          How do I get these JSON files?
+        </span>
+      </p>
+      <button class="close" onclick="hideGuide()">Close</button>
+    </div>
+
+    <div id="detailGuide" style="display:none; text-align: left;">
+      <h3>Get Your IG Data</h3>
+      <p style="font-size: 0.85rem; line-height: 1.5; color: white;">
+        1. Go to IG Profile > Menu > <b>Your Activity</b>.<br>
+        2. Select <b>Download your information</b>.<br>
+        3. Tap <b>Download or transfer information</b>.<br>
+        4. Choose <b>Some of your information</b>.<br>
+        5. Select <b>Followers and Following</b>.<br>
+        6. Choose <b>Download to device</b>.<br>
+        7. Set Format to <b>JSON</b> (Important!) and Quality to <b>Low</b>.<br>
+        8. Click <b>Create Files</b>. Wait for the email from Instagram.
+      </p>
+      <button class="close" onclick="backToMain()" >Back</button>
+    </div>
+
+  </div>
 </div>
 
 <footer>
@@ -414,7 +435,28 @@ function showNotif(text,type='error'){
  },3000);
 }
 
+// Ambil elemen
+const mainGuide = document.getElementById('mainGuide');
+const detailGuide = document.getElementById('detailGuide');
+const btnHowTo = document.getElementById('howToGetFile');
 
+// Klik langkah 6 untuk pindah ke detail
+btnHowTo.onclick = () => {
+  mainGuide.style.display = 'none';
+  detailGuide.style.display = 'block';
+};
+
+// Fungsi untuk kembali ke panduan utama
+function backToMain() {
+  detailGuide.style.display = 'none';
+  mainGuide.style.display = 'block';
+}
+
+// Update fungsi hideGuide agar reset ke tampilan utama saat ditutup
+function hideGuide() {
+  document.getElementById('guideModal').style.display = 'none';
+  setTimeout(backToMain, 300); // Reset konten setelah modal tertutup
+}
 </script>
 
 
